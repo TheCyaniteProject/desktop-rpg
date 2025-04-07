@@ -17,85 +17,64 @@
             width: 100%;
             overflow: hidden;
         }
-        .app-container {
-            position: relative;
-            background: rgba(0, 0, 0, 0.5);
-            height: 100%;
-            width: 100%;
+
+        #dialogue {
+            background-color: black;
+            width: 25%;
+            height: 15%;
+            position: absolute;
+            top: 50%;
+            left: calc(50% - (25% / 2));
         }
-        .window-border {
-            pointer-events: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            border: 1px solid rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            /* border-radius: 10px; */
+
+        #background {
+            background-image:url('C:/Users/thecy/Downloads/Nature Landscapes Free Pixel Art/nature_1/nature_1/8.png');
+            background-repeat:no-repeat;
+            /* background-color: skyblue; */
+            
+            width: 25%;
+            height: 15%;
+            position: absolute;
+            top: calc(100% - (15% / 2));
+            left: calc(50% - (25% / 2));
+
+            pointer-events:none;
         }
-        .title-bar {
-            font-family: "Roboto", sans-serif;
-            -webkit-app-region: drag;
-            height: 30px;
-            background: rgba(0, 0, 0, 0.6);
+
+        #character {
+            background-color: green;
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 85%;
+            left: 25%;
+        }
+
+        #enemy {
+            background-color: red;
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 85%;
+            right: 25%;
+        }
+
+        span {
             color: white;
-            line-height: 30px;
-            padding: 0 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 1001;
         }
 
     </style>
 </head>
-<body id="main">
-    <div class="app-container" id="appContainer">
-        <div class="title-bar">
-            <div class="title">
-                <span style="font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20; font-size: 20px;" class="material-symbols-outlined">folder</span>
-                <span>Hello World!</span>
-            </div>
-            <div class="controls">
-                <span style="font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20; font-size: 20px; cursor: pointer; padding: 2px;" class="material-symbols-outlined" id="debug">code</span>
-                <span style="font-variation-settings: 'FILL' 0, 'wght' 330, 'GRAD' 0, 'opsz' 20; font-size: 20px; cursor: pointer; position: relative; bottom: 7px;" class="material-symbols-outlined" id="minimize">minimize</span>
-                <span style="font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20; font-size: 20px; cursor: pointer;" class="material-symbols-outlined" id="close">close</span>
-            </div>
-            <style>
-                .title {
-                    display: flex;
-                    align-items: center;
-                    -webkit-app-region: no-drag;
-                }
-                .controls {
-                    display: flex;
-                    align-items: center;
-                    -webkit-app-region: no-drag;
-                }
-            </style>
-            <script>
+<body>
+    <div id="dialogue">
+        <span>some text</span>
+    </div>
+    <div id="background"></div>
+    <div id="character">
 
-                document.getElementById("debug").addEventListener("click", () => {
-                    window.api.openDevTools();
-                });
-                document.getElementById("minimize").addEventListener("click", () => {
-                    window.api.minimize();
-                });
-                document.getElementById("close").addEventListener("click", () => {
-                    window.api.close();
-                });
+    </div>
+    <div id="enemy">
 
-                document.getElementById("refresh").addEventListener("click", () => {
-                    onBlurOrEnter();
-                });
-                
-            </script>
-        </div>
-        
-        <div class="window-border"></div>
     </div>
 </body>
 </html>

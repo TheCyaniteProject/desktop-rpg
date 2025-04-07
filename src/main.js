@@ -4,40 +4,34 @@ const path = require('node:path')
 
 // modify your existing createWindow() function
 const createWindow = () => {
-    const win = new BrowserWindow({
-        width: 800,
-        height: 600,
+    const window = new BrowserWindow({
+        fullscreen: true,
+        resizable: false,
+        movable: false,
+        minimizable: true,
         transparent: true,
+        //focusable: false,
         frame: false,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, './preload.js'),
         }
-    })
+    });
 
-    win.loadFile('index.html')
+    window.loadFile('index.html');
+    //window.webContents.openDevTools();
+
 }
 
-ipcMain.on('minimize', (event) => {
-  const win = BrowserWindow.fromWebContents(event.sender);
-  if (win) win.minimize();
-});
-ipcMain.on('close', (event) => {
-  const win = BrowserWindow.fromWebContents(event.sender);
-  if (win) win.close();
-});
-ipcMain.on('open-devtools', (event) => {
-  const win = BrowserWindow.fromWebContents(event.sender);
-  if (win) win.webContents.openDevTools();
-});
+app.disableHardwareAcceleration();
 
 app.whenReady().then(() => {
     createWindow()
 
     app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow()
+        if (BrowserWindow.getAllWindows().length === 0) createWindow();
     })
 })
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit()
+    if (process.platform !== 'darwin') app.quit();
 })
