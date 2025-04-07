@@ -46,14 +46,15 @@
             height: 100%;
             position: absolute;
             top: 18%;
+
+            image-rendering: pixelated;
         }
 
         #character {
-            background-color: green;
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: 200px;
             position: absolute;
-            top: calc(99% - (100px));
+            top: calc(99.9% - 200px);
             left: 32%;
         }
 
@@ -64,6 +65,13 @@
             position: absolute;
             top: 85%;
             right: 32%;
+        }
+
+        .character-img {
+            height: 100%;
+            width: 100%;
+
+            image-rendering: pixelated;
         }
 
         span {
@@ -80,7 +88,7 @@
         <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/parallax/nature_1/8.png' id="background-img"/>
     </div>
     <div id="character">
-        <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resourcescharacters/free-3-character-sprite-sheets-pixel-art/1 Woodcutter/Woodcutter.png' id="background-img"/>
+        <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/characters/free-3-character-sprite-sheets-pixel-art/1 Woodcutter/Woodcutter.png' class="character-img"/>
     </div>
     <div id="enemy">
 
