@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <title>Hello World!</title>
+    <title>Desktop</title>
     <style>
 
         html, body {
@@ -18,10 +18,12 @@
             overflow: hidden;
         }
 
-        #dialogue {
+        .menu {
             background-color: black;
+            border: 3px solid white;
             width: 25%;
             height: 15%;
+            padding: 5px;
             position: absolute;
             top: 50%;
             left: calc(50% - (25% / 2));
@@ -51,6 +53,7 @@
         }
 
         #character {
+            image-rendering: pixelated;
             width: 200px;
             height: 200px;
             position: absolute;
@@ -59,12 +62,14 @@
         }
 
         #enemy {
-            background-color: red;
-            width: 100px;
-            height: 100px;
+            image-rendering: pixelated;
+            /* background-color: red; */
+            width: 300px;
+            height: 200px;
             position: absolute;
-            top: 85%;
+            top: calc(99.9% - 174px);
             right: 32%;
+            transform: scaleX(-1);
         }
 
         .character-img {
@@ -74,24 +79,868 @@
             image-rendering: pixelated;
         }
 
-        span {
+        .dialogue {
+            font-family: "Roboto", sans-serif;
             color: white;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+        }
+
+        #buttons {
+            height: 22%;
+            width: 100%;
+            position: absolute;
+            background-color: red;
+            top: calc(99% - 20%);
+            left: 0;
+            display: flex;
+        }
+
+        button {
+            background-color: black;
+            border: 3px solid white;
+            color: white;
+            font-family: "Roboto", sans-serif;
+            width: 100%;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: rgb(10, 10, 10);
+            border: 3px solid white;
+            color: white;
+            font-family: "Roboto", sans-serif;
+            width: 100%;
+        }
+        button:active {
+            background-color: rgb(20, 20, 20);
+            border: 3px solid white;
+            color: white;
+            font-family: "Roboto", sans-serif;
+            width: 100%;
+        }
+
+        #stats {
+            height: 22%;
+            width: 98.5%;
+            position: absolute;
+            border-top: 3px solid white;
+            padding: 5px;
+            text-align: center;
+            font-family: "Roboto", sans-serif;
+            color: white;
+            top: calc(77% - 20%);
+            left: 0;
+            display: flex;
+        }
+
+        #inventory {
+            height: 30%;
+            overflow: visible;
+        }
+
+        #close-button {
+            height: 25px;
+            width: 50px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        #items {
+            max-height: 100%;
+            width: 100%;    
+            overflow-y: auto;    
+            padding: 10px;
+            color: white;
+        }
+
+        .scene {
+            height: 100%;
+            width: 100%;
+            display: none;
         }
 
     </style>
 </head>
 <body>
-    <div id="dialogue">
-        <span>some text</span>
+    <div class="menu" id="dialogue">
+        <div class="dialogue" id="dialogue-text">A challenger approaches..</div>
+        <div id="stats">test</div>
+        <div id="buttons">
+            <button id="inventory-button">Inventory</button>
+            <!-- <button id="flee-button">Flee</button> -->
+            <button id="attack-button">Attack</button>
+            <button id="forward-button">Forward</button>
+        </div>
     </div>
-    <div id="background">
-        <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/parallax/nature_1/8.png' id="background-img"/>
+    <div class="menu" id="inventory" style="display: none;"> <!-- inventory -->
+        <button id="close-button">Close</button>
+        <div id="items"></div>
     </div>
-    <div id="character">
-        <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/characters/free-3-character-sprite-sheets-pixel-art/1 Woodcutter/Woodcutter.png' class="character-img"/>
+    <div class="scene" id="town-scene">
+        <div id="background">
+            <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/parallax/nature_1/8.png' id="background-img"/>
+        </div>
     </div>
-    <div id="enemy">
+    <div class="scene" id="shop-scene">
+        <div id="background">
+            <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/parallax/nature_1/8.png' id="background-img"/>
+        </div>
+    </div>
+    <div class="scene" id="battle-scene">
+        <div id="background">
+            <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/parallax/nature_1/8.png' id="background-img"/>
+        </div>
+        <div id="character">
+            <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/characters/free-3-character-sprite-sheets-pixel-art/1 Woodcutter/Woodcutter.png' class="character-img"/>
+        </div>
+        <div id="enemy">
+            <!-- <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/characters/Enemies/skeleton_idle.gif' class="character-img"/> -->
+        </div>
+    </div>
+    <script>
+        // Since this is such a simple project, most of the code will just be here in the renderer
 
-    </div>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("inventory-button").addEventListener("click", () => {
+                openInventory();
+            });
+            document.getElementById("close-button").addEventListener("click", () => {
+                closeInventory();
+            });
+            // document.getElementById("flee-button").addEventListener("click", () => {
+            //     // TODO: attempt to flee
+            // });
+            document.getElementById("attack-button").addEventListener("click", () => {
+                playerAttack();
+            });
+            document.getElementById("forward-button").addEventListener("click", () => {
+                moveForward();
+            });
+        });
+
+        const scenes = {
+            "TOWN": {
+                "id": "town",
+                "name": "town-scene"
+            },
+            "SHOP": {
+                "id": "shop",
+                "name": "shop-scene"
+            },
+            "BATTLE": {
+                "id": "battle",
+                "name": "battle-scene"
+            }
+        }
+
+        const character = {
+            "PLAYER": "player",
+            "ENEMY": "enemy"
+        }
+
+        const items = {
+            "basic_knife": {
+                "name": "Basic Knife",
+                "description": "It's just a knife.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 4
+            },
+            "apple": {
+                "name": "Apple",
+                "description": "A juicy red apple.",
+                "isEquipment": false,
+                "health": 1,
+                "turns": 5
+            },
+            "healing_potion": {
+                "name": "Healing Potion",
+                "description": "A small vial that restores a bit of health over time.",
+                "isEquipment": false,
+                "health": 5,
+                "turns": 2
+            },
+            "full_heal_potion": {
+                "name": "Full Heal Potion",
+                "description": "A miraculous potion that fully restores health (up to the character's max).",
+                "isEquipment": false,
+                "health": 9999,
+                "turns": 1
+            },
+            "sturdy_shield": {
+                "name": "Sturdy Shield",
+                "description": "A reliable shield that helps block incoming attacks.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "defense": 3
+            },
+            "iron_sword": {
+                "name": "Iron Sword",
+                "description": "A basic but effective blade forged from iron.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 5
+            },
+            "magic_staff": {
+                "name": "Magic Staff",
+                "description": "A staff imbued with arcane energy that slightly increases endurance.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 3,
+                "max_health": 2
+            },
+            "cursed_amulet": {
+                "name": "Cursed Amulet",
+                "description": "An eerie amulet that boosts your max health at the cost of a weakened defense. Once worn, it cannot be removed.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "isCursed": true,
+                "max_health": 4,
+                "defense": -2
+            },
+            "thunder_hammer": {
+                "name": "Thunder Hammer",
+                "description": "A heavy hammer imbued with the power of lightning. Its weight may slightly hamper your defense.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 7,
+                "defense": -1
+            },
+            "mystic_ring": {
+                "name": "Mystic Ring",
+                "description": "A ring of mysterious origin that bolsters your overall vitality.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "defense": 2,
+                "max_health": 3
+            },
+            "shadow_cloak": {
+                "name": "Shadow Cloak",
+                "description": "A cloak woven from dark fabrics. It offers impressive protection but seems to sap a bit of your life force.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "defense": 4,
+                "health": -2
+            },
+            "swift_boots": {
+                "name": "Swift Boots",
+                "description": "Lightweight boots that feel like they add a little extra punch to your steps.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 1,
+                "defense": 1
+            },
+            "vitality_belt": {
+                "name": "Vitality Belt",
+                "description": "A belt that expands your life force considerably—but its cursed nature means you can never take it off.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "isCursed": true,
+                "max_health": 6
+            },
+            "defense_medallion": {
+                "name": "Defense Medallion",
+                "description": "A medallion that radiates protective energy, adding to your resilience in battle.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "defense": 3
+            },
+            "poison_dagger": {
+                "name": "Poison Dagger",
+                "description": "A dagger coated in a potent toxin. It deals extra damage at the cost of a slight self-inflicted harm.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 4,
+                "health": -1
+            },
+            "ember_blade": {
+                "name": "Ember Blade",
+                "description": "A sword with a heated edge that seems to sizzle with embers.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 6
+            },
+            "icy_sword": {
+                "name": "Icy Sword",
+                "description": "A sword that glows with a chilling light, slightly boosting your defense as well.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 4,
+                "defense": 2
+            },
+            "storm_armor": {
+                "name": "Storm Armor",
+                "description": "Heavy armor that not only protects but also increases your maximum endurance.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "defense": 5,
+                "max_health": 8
+            },
+            "wind_bracer": {
+                "name": "Wind Bracer",
+                "description": "A light, nimble bracer that adds a bit of protection without weighing you down.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "defense": 2
+            },
+            "stone_gauntlets": {
+                "name": "Stone Gauntlets",
+                "description": "Solid gauntlets that marginally increase both your strength and resilience.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 2,
+                "defense": 1
+            },
+            "sun_shield": {
+                "name": "Sun Shield",
+                "description": "A radiating shield that boosts your vitality and offers admirable defense.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "max_health": 3,
+                "defense": 2
+            },
+            "moonspear": {
+                "name": "Moon Spear",
+                "description": "A slender spear that glimmers like moonlight and slightly increases your endurance.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 5,
+                "max_health": 1
+            },
+            "dragon_scale": {
+                "name": "Dragon Scale",
+                "description": "A rare scale from a dragon, bolstering both your protection and life force.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "defense": 4,
+                "max_health": 5
+            },
+            "rune_helmet": {
+                "name": "Rune Helmet",
+                "description": "A helmet engraved with ancient runes that subtly improve both defense and vitality.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "defense": 2,
+                "max_health": 2
+            },
+            "fury_axe": {
+                "name": "Fury Axe",
+                "description": "A brutal axe that delivers overwhelming damage but leaves you a bit more vulnerable.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "damage": 7,
+                "defense": -1
+            },
+            "guardian_boots": {
+                "name": "Guardian Boots",
+                "description": "Boots that instill a sense of protection, adding appreciable extra defense to your step.",
+                "isEquipment": true,
+                "isEquiped": false,
+                "defense": 3
+            },
+            "elixir_of_strength": {
+                "name": "Elixir of Strength",
+                "description": "A mysterious potion that temporarily increases your offensive power.",
+                "isEquipment": false,
+                "damage": 3,
+                "turns": 3
+            },
+            "elixir_of_fortitude": {
+                "name": "Elixir of Fortitude",
+                "description": "A potion that gradually enhances your max health over a short period.",
+                "isEquipment": false,
+                "max_health": 4,
+                "turns": 2
+            },
+            "potion_of_speed": {
+                "name": "Potion of Speed",
+                "description": "A quick-acting brew that slightly augments your attack prowess for a single turn.",
+                "isEquipment": false,
+                "damage": 2,
+                "turns": 1
+            },
+            "potion_of_regeneration": {
+                "name": "Potion of Regeneration",
+                "description": "A soothing potion that restores health little by little over several turns.",
+                "isEquipment": false,
+                "health": 4,
+                "turns": 4
+            }
+        };
+
+        let playerData = {
+            "health": 30,
+            "max_health": 30,
+            "damage": 4,
+            "defense": 2,
+            "equipment": {
+            },
+            "inventory": {
+            }
+        }
+
+        const enemy = {
+            "SKELETON": {
+                "name": "Skeleton",
+                "health": 20,
+                "max_health": 20,
+                "damage": 3,
+                "defense": 2,
+                "sprite": "https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/characters/Enemies/skeleton_idle.gif",
+                "inventory": {
+
+                },
+                "isDead": false
+            }
+        }
+
+        const dialogue = {
+            "enemy": [
+                "A {enemy_name} has appeared!",
+                "Beware, a {enemy_name} is here!",
+                "Watch your step— a {enemy_name} approaches!",
+                "You see an ominous shadow: It's a {enemy_name}!",
+                "Brace yourself; the {enemy_name} is near!",
+                "A {enemy_name} makes its entrance!",
+                "Heads up! A {enemy_name} lurks in the dark!",
+                "Prepare for battle— A {enemy_name} has emerged!",
+                "The dreaded {enemy_name} announces its presence!",
+                "Enemies ahead— a {enemy_name} is on the prowl!"
+            ]
+        }
+
+        let currentScene = undefined;
+        let currentEnemy = undefined;
+        // setScene(scenes.TOWN); // debug
+
+        setScene(scenes.BATTLE); // debug
+
+        function setScene(scene) {
+            currentScene = scene;
+            switch (scene.id) {
+                case "battle":
+                    setEnemy(getRandomFromSet(Object.values(enemy)));
+                    break;
+            }
+            document.getElementById(scene.name).style.display = 'block';
+
+            // useItem(character.PLAYER, { // for testing
+            //     "damage": 100
+            // });
+            updateStats();
+        }
+
+        function addItem(character, item) {
+            const guid = crypto.randomUUID();
+            item['guid'] = guid;
+            switch(character) {
+                case "player":
+                    playerData.inventory[guid] = item;
+                    console.log(playerData.inventory);
+                    break;
+                case "enemy": {
+                    currentEnemy.inventory[guid] = item;
+                }
+            }
+        }
+
+        function openInventory() {
+            const dialogue = document.getElementById("dialogue");
+            const inventory = document.getElementById("inventory");
+            dialogue.style.display = "none";
+            inventory.style.display = "flex";
+            updateInventory();
+        }
+
+        function closeInventory() {
+            const dialogue = document.getElementById("dialogue");
+            const inventory = document.getElementById("inventory");
+            dialogue.style.display = "block";
+            inventory.style.display = "none";
+        }
+
+        function updateInventory() {
+            const container = document.getElementById("items");
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+
+            let inventory = playerData.inventory;
+
+            for (let key in inventory) {
+                if (inventory.hasOwnProperty(key)) {
+                    const item = inventory[key];
+
+                    // Create a container div for the item
+                    const itemDiv = document.createElement("div");
+                    itemDiv.className = "item";
+
+                    // Create and append the title element (name)
+                    const title = document.createElement("h3");
+                    title.textContent = item.name;
+                    itemDiv.appendChild(title);
+
+                    // Create and append the description paragraph
+                    const desc = document.createElement("p");
+                    desc.textContent = item.description;
+                    itemDiv.appendChild(desc);
+
+                    // Create the button element
+                    const button = document.createElement("button");
+
+                    // Set the button text based on item type and state:
+                    // For equipment: if equipped show "Unequip", otherwise "Equip"
+                    // For non-equipment items: show "Use"
+                    if (item.isEquipment) {
+                        button.textContent = item.isEquiped ? "Unequip" : "Equip";
+                        if (item.isCursed && item.isEquiped) {
+                            button.style.color = "gray";
+                        }
+                    } else {
+                        button.textContent = "Use";
+                    }
+
+                    button.addEventListener("click", function() {
+                        // Equipment items: toggle equip state and update button text
+                        console.log(item);
+                        if (!item.isCursed) {
+                            useItem(character.PLAYER, item);
+                            if (item.isEquipment) {
+                                button.textContent = item.isEquiped ? "Unequip" : "Equip";
+                                console.log(`${item.isEquiped ? "Equipped" : "Unequipped"}: ${item.name}`);
+                            }
+                            else {
+                                console.log("here");
+                                container.removeChild(itemDiv);
+                            }
+                        }
+                        else if (item.isEquipment || !item.isEquiped) {
+                            useItem(character.PLAYER, item);
+                            if (item.isEquipment) {
+                                button.textContent = item.isEquiped ? "Unequip" : "Equip";
+                                console.log(`${item.isEquiped ? "Equipped" : "Unequipped"}: ${item.name}`);
+                            }
+                        }
+                        else {
+                            button.style.color = "gray";
+                        }
+                    });
+
+                    itemDiv.appendChild(button);
+
+                    // Append the div to your desired container (example: document.body)
+                    container.appendChild(itemDiv);
+                }
+            }
+        }
+
+        function useItem(character, item) {
+            if (item.isEquipment || (item.turns && item.turns > 1)) {
+                switch(character) {
+                    case "player":
+                        item.isEquiped = !item.isEquiped;
+                        if (item.isEquiped) {
+                            playerData.equipment[item.guid] = item;
+                        }
+                        else {
+                            delete playerData.equipment[item.guid];
+                        }
+                        break;
+                    case "enemy": 
+                        item.isEquiped = !item.isEquiped;
+                        if (item.isEquiped) {
+                            currentEnemy.equipment[item.guid] = item;
+                        }
+                        else {
+                            delete currentEnemy.equipment[item.guid];
+                        }
+                    break;
+                }
+            }
+            else {
+                if (item.health) {
+                    modifyHealth(character, item.health);
+                }
+                if (item.max_health) {
+                    modifyMaxHealth(character, item.max_health);
+                }
+                if (item.defense) {
+                    modifyDefense(character, item.defense);
+                }
+                if (item.damage) {
+                    modifyDamage(character, item.damage);
+                }
+            }
+            updateStats();
+        }
+
+        function updateStats() {
+            const container = document.getElementById("stats");
+            container.innerText = `Health ${getHealth(character.PLAYER)}/${getMaxHealth(character.PLAYER)} | Defense ${getDefense(character.PLAYER)} | Attack ${getDamage(character.PLAYER)}`;
+        }
+
+        function getHealth(character) {
+            switch (character) {
+                case "player":
+                    let totalHealth = playerData.health;
+                    // Loop through equipped items and add any "health" modifier
+                    for (let key in playerData.equipment) {
+                        if (playerData.equipment.hasOwnProperty(key)) {
+                        let eq = playerData.equipment[key];
+                        if (eq.isEquiped && typeof eq.health === 'number') {
+                            totalHealth += eq.health;
+                        }
+                        }
+                    }
+                    return totalHealth;
+                default:
+                    return currentEnemy.health;
+            }
+        }
+
+        function getMaxHealth(character) {
+            switch (character) {
+                case "player":
+                let totalMaxHealth = playerData.max_health;
+                // Loop through equipped items and add any "max_health" modifier
+                for (let key in playerData.equipment) {
+                    if (playerData.equipment.hasOwnProperty(key)) {
+                    let eq = playerData.equipment[key];
+                    if (eq.isEquiped && typeof eq.max_health === 'number') {
+                        totalMaxHealth += eq.max_health;
+                    }
+                    }
+                }
+                return totalMaxHealth;
+                default:
+                    return currentEnemy.max_health;
+            }
+        }
+
+        function getDefense(character) {
+            switch (character) {
+                case "player":
+                    let totalDefense = playerData.defense;
+                    // Loop through equipped items and add any "defense" modifier
+                    for (let key in playerData.equipment) {
+                        if (playerData.equipment.hasOwnProperty(key)) {
+                        let eq = playerData.equipment[key];
+                        if (eq.isEquiped && typeof eq.defense === 'number') {
+                            totalDefense += eq.defense;
+                        }
+                        }
+                    }
+                    return totalDefense;
+                default:
+                    return currentEnemy.defense;
+            }
+        }
+
+        function getDamage(character) {
+            switch (character) {
+                case "player":
+                    let totalDamage = playerData.damage;
+                    // Loop through equipped items and add any "damage" modifier
+                    for (let key in playerData.equipment) {
+                        if (playerData.equipment.hasOwnProperty(key)) {
+                        let eq = playerData.equipment[key];
+                        if (eq.isEquiped && typeof eq.damage === 'number') {
+                            totalDamage += eq.damage;
+                        }
+                        }
+                    }
+                    return totalDamage;
+                default:
+                    return currentEnemy.damage;
+            }
+        }
+
+        function playerAttack() { // attack the enemy
+            if (playerData.health > 0) {
+                if (currentEnemy && !currentEnemy.isDead) {
+                    modifyHealth(character.ENEMY, -playerData.damage); // TODO: fetch equipment to see if damage is augmented
+                }
+                else {
+                    setDialogue("There's nothing to attack.")
+                }
+                endTurn();
+            }
+        }
+
+        function enemyAttack() { // attack the enemy
+            modifyHealth(character.PLAYER, -currentEnemy.damage); // TODO: fetch equipment to see if damage is augmented
+            updateItemTurns(character.ENEMY);
+        }
+
+        function endTurn() { // After the player's turn
+            if (currentEnemy && !currentEnemy.isDead) {
+                enemyAttack();
+                updateStats();
+            }
+            updateItemTurns(character.PLAYER);
+        }
+
+        function updateItemTurns(character) {
+            // Determine which equipment collection to update.
+            let equipment;
+            switch (character) {
+                case "player":
+                equipment = playerData.equipment;
+                break;
+                case "enemy":
+                equipment = currentEnemy.equipment;
+                break;
+                default:
+                console.warn("updateEquipmentTurns: unknown character", character);
+                return;
+            }
+
+            // Loop over a copy of the keys so that deletion during iteration won't cause issues.
+            if (equipment) {
+                Object.keys(equipment).forEach(function(key) {
+                    let item = equipment[key];
+                    
+                    // Check if the item has a turns property.
+                    if (typeof item.turns === 'number') {
+                        // Decrement turns.
+                        item.turns -= 1;
+                        
+                        // If turns reaches zero, remove the item from equipment.
+                        if (item.turns <= 0) {
+                            delete equipment[key];
+                            console.log(`Removed ${item.name} from equipment as its turns expired.`);
+                        }
+                    }
+                });
+            }
+        }
+
+        function modifyHealth(character, amount) {
+            const char = character === "player"? playerData : currentEnemy;
+
+            const defense = getDefense(character);
+            const maxHealth = getMaxHealth(character);
+            const health = getHealth(character);
+
+            // If amount is negative (i.e., damage), offset it by the defense value.
+            if (amount < 0) {
+                amount = amount + defense;
+                // Prevent defense from turning damage into healing.
+                if (amount > 0) {
+                amount = 0;
+                }
+            }
+
+            char.health = getHealth(character);
+            console.log(char.health);
+            console.log(amount);
+
+            // Update health and clamp it between 0 and the maximum health.
+            char.health = clamp(char.health + amount, 0, maxHealth);
+
+            // Check for death (health <= 0) for the relevant character.
+            if (char.health <= 0) {
+                if (character === "player") {
+                    onPlayerDeath();
+                } else if (character === "enemy") {
+                    onEnemyDeath();
+                }
+            }
+        }
+
+        function modifyMaxHealth(character, amount) {
+            switch (character) {
+                case "player":
+                    playerData.max_health += amount;
+                    break;
+                case "enemy":
+                    currentEnemy.max_health += amount;
+                    break;
+            }
+        }
+
+        function modifyDefense(character, amount) {
+            switch (character) {
+                case "player":
+                    playerData.defense += amount;
+                    break;
+                case "enemy":
+                    currentEnemy.defense += amount;
+                    break;
+            }
+        }
+
+        function modifyDamage(character, amount) {
+            switch (character) {
+                case "player":
+                    playerData.damage += amount;
+                    break;
+                case "enemy":
+                    currentEnemy.damage += amount;
+                    break;
+            }
+        }
+
+        function onPlayerDeath() {
+            setDialogue("You died.")
+        }
+
+        function onEnemyDeath() {
+            currentEnemy.isDead = true;
+            const newItem = getRandomFromSet(Object.values(items));
+            setDialogue(`${currentEnemy.name} has been defeated! You gain ${newItem.name}!`)
+            addItem(character.PLAYER, newItem);
+            clearEnemy();
+        }
+
+        function moveForward() {
+            if (currentEnemy && !currentEnemy.isDead) {
+                setDialogue(`Your path is blocked!`)
+            }
+            else {
+                setEnemy(getRandomFromSet(Object.values(enemy)));
+            }
+        }
+
+        function setEnemy(enemy) {
+            clearEnemy();
+            currentEnemy = JSON.parse(JSON.stringify(enemy));
+
+            const img = document.createElement("img");
+            img.className = "character-img";
+            img.src = currentEnemy.sprite;
+
+            const container = document.getElementById("enemy");
+
+            container.appendChild(img);
+
+            setDialogue(getRandomFromSet(dialogue.enemy).replace('{enemy_name}', enemy.name))
+        }
+
+        function clearEnemy() {
+            const container = document.getElementById("enemy");
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+            currentEnemy = undefined;
+        }
+
+
+        function setDialogue(text) {
+            document.getElementById("dialogue-text").innerText = text;
+        }
+
+        function getRandomFromSet(group) {
+            const randomIndex = Math.floor(Math.random() * group.length);
+            return group[randomIndex];
+        }
+
+        function clamp(num, min, max) {
+            return Math.min(Math.max(num, min), max);
+        }
+
+    </script>
 </body>
 </html>

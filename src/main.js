@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron');
 // include the Node.js 'path' module at the top of your file
-const path = require('node:path')
+const path = require('node:path');
+const mommy = require('node-mommy');
 
 // modify your existing createWindow() function
 const createWindow = () => {
@@ -18,7 +19,7 @@ const createWindow = () => {
 
     window.loadFile('index.html');
     window.maximize();
-    // window.webContents.openDevTools();
+    window.webContents.openDevTools();
 
 }
 

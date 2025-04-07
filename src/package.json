@@ -13,5 +13,8 @@
   "devDependencies": {
     "electron": "^35.0.1",
     "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "node-mommy": "^1.7.0"
   }
 }
