@@ -1,0 +1,17 @@
+{
+  "name": "desktop-rpg",
+  "version": "25w15a",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager ./ desktop-rpg --platform=win32 --arch=x64 --overwrite --out=build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL-3.0-only",
+  "description": "",
+  "devDependencies": {
+    "electron": "^35.0.1",
+    "electron-packager": "^17.1.2"
+  }
+}
