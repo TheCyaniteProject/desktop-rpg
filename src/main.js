@@ -5,12 +5,11 @@ const path = require('node:path')
 // modify your existing createWindow() function
 const createWindow = () => {
     const window = new BrowserWindow({
-        fullscreen: true,
         resizable: false,
         movable: false,
         minimizable: true,
         transparent: true,
-        //focusable: false,
+        focusable: false,
         frame: false,
         webPreferences: {
             preload: path.join(__dirname, './preload.js'),
@@ -18,7 +17,8 @@ const createWindow = () => {
     });
 
     window.loadFile('index.html');
-    //window.webContents.openDevTools();
+    window.maximize();
+    // window.webContents.openDevTools();
 
 }
 

@@ -28,17 +28,24 @@
         }
 
         #background {
-            background-image:url('C:/Users/thecy/Downloads/Nature Landscapes Free Pixel Art/nature_1/nature_1/8.png');
+            /* background-image:url(../img/reflection.png); */
             background-repeat:no-repeat;
             /* background-color: skyblue; */
             
-            width: 25%;
-            height: 15%;
+            height: 40%;
+            width: 40%;
             position: absolute;
-            top: calc(100% - (15% / 2));
-            left: calc(50% - (25% / 2));
+            top: calc(100% - (40%));
+            left: calc(50% - (40% / 2));
 
             pointer-events:none;
+        }
+
+        #background-img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 18%;
         }
 
         #character {
@@ -46,8 +53,8 @@
             width: 100px;
             height: 100px;
             position: absolute;
-            top: 85%;
-            left: 25%;
+            top: calc(99% - (100px));
+            left: 32%;
         }
 
         #enemy {
@@ -56,7 +63,7 @@
             height: 100px;
             position: absolute;
             top: 85%;
-            right: 25%;
+            right: 32%;
         }
 
         span {
@@ -69,9 +76,11 @@
     <div id="dialogue">
         <span>some text</span>
     </div>
-    <div id="background"></div>
+    <div id="background">
+        <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resources/parallax/nature_1/8.png' id="background-img"/>
+    </div>
     <div id="character">
-
+        <img src='https://raw.githubusercontent.com/TheCyaniteProject/desktop-rpg/main/src/resourcescharacters/free-3-character-sprite-sheets-pixel-art/1 Woodcutter/Woodcutter.png' id="background-img"/>
     </div>
     <div id="enemy">
 
